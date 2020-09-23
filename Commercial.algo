@@ -1,0 +1,38 @@
+-------------------------------------"    Doors and Elevators Status   "-------------------------------------
+
+
+%%%%"  Doors Status  "%%%%
+'This section provides closing and opening properties of the doors in respect with the status of the elevator.
+         
+            SEQUENCE openDoors USING elevator
+                IF elevator is stopped THEN 
+                    SET doors TO open
+                ELSE IF doors is opened THEN
+                    SET timer TO 15 seconds THEN
+                        CALL closeDoors WITH elevator
+                END IF
+            END SEQUENCE
+
+            SEQUENCE closeDoors USING elevator
+                IF doors are not blocked THEN
+                    SET doors TO closeDoor
+                ELSE IF doors are blocked THEN
+                    CALL openDoors WITH elevator
+                END IF
+            END SEQUENCE
+
+
+%%%%"  Elevator Status  "%%%%
+'This section elaborates the different status an elevator can have.
+
+            SEQUENCE idle USING elevator
+                SET elevatorStatus TO idle
+            END SEQUENCE    
+
+            SEQUENCE move USING elevator
+                SET elevatorStatus to moving
+            END SEQUENCE
+
+            SEQUENCE stop USING elevator 
+                SET elevatorStatus to stopped
+            END SEQUENCE
