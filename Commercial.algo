@@ -55,16 +55,27 @@
                 CREATE new elevator
                     SET elevator buttonList TO EMPTY list
                         FOR numberFloors DO
-                            CALL createFloorButton WITH numberFloors
+                            CALL createLobbyConsole WITH numberFloors
                                 ADD button TO buttonList
                         END FOR
             END SEQUENCE
 
-'This section creates the floor buttons inside the elevator and sets it to off.
+'This section creates the lobby console.
 
-            SEQUENCE createFloorButton USING numberFloors
-                CREATE new FloorButton
-                    SET FloorButton status TO 'OFF'
+            SEQUENCE createLobbyConsole USING numberFloors
+                CREATE new lobbyConsole 
+                    SET lobbyConsole buttonList TO EMPTY list
+                        FOR numberFloors DO
+                            CALL createLobbyConsoleButton WITH numberFloors
+                                ADD button TO buttonList
+                        END FOR
+            END SEQUENCE
+
+'This section creates the floor buttons on the lobby console and sets it to off.
+
+            SEQUENCE createLobbyConsoleButton USING numberFloors
+                CREATE new lobbyConsoleButton
+                    SET lobbyConsoleButton status TO 'OFF'
             END SEQUENCE
 
 %%%%"   Optimal Elevator Lobby Console Screen   "%%%%
@@ -133,7 +144,7 @@
                 SET elevatorStatus to stopped
             END SEQUENCE
 
--------------------------------------"   Floor Call on Lobby Console & Elevator Call Buttons   "-------------------------------------
+'-------------------------------------"   Floor Call on Lobby Console & Elevator Call Buttons   "-------------------------------------
 'This section controls what happens when the floor call on the lobby console and the elevator call buttons are activated. 
 
 %%%%"  Floor Call on Lobby Console  "%%%%
