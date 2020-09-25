@@ -99,11 +99,13 @@
             END SEQUENCE
 
             SEQUENCE closeDoors USING elevator
-                IF elevatorDoors are not blocked THEN
-                    SET elevatorDoors TO closeDoor
-                ELSE IF elevatorDoors are blocked THEN
-                    CALL openDoors WITH elevator
-                END IF
+                CALL overLimitWeight WITH weightScale AND limitWeight RETURNING occupantWeight
+                    SET elevatorDoors TO close
+                        IF occupantWeight is EQUAL or LOWER THAN limitWeight OR elevatorDoors are not blocked THEN
+                            keep closing elevatorDoors
+                        ELSE IF occupantWeight is GREATER THAN limitWeight OR elevatorDoors are blocked THEN
+                            CALL openDoors WITH elevator
+                        END IF
             END SEQUENCE
 
 
@@ -257,6 +259,7 @@
                         ELSE IF elevatorFloor is GREATER THAN requestedFloor
                             CALL moveDown WITH elevator AND requestedFloor
                         END IF
+                    CALL originLocation WITH elevator
                 END WHILE
             END SEQUENCE
 
@@ -288,7 +291,28 @@
                     CALL openDoors with elevator
             END SEQUENCE
 
+'-------------------------------------"    Elevator's Return to Origin    "-------------------------------------
 
+SEQUENCE originLocation USING elevator
+    SET originLocation TO 1
+        READ sortedFloorQueue THEN
+            IF sortedFloorQueue is EMPTY
+                CALL moveDown WITH elevator TO originLocation
+            END IF
+END SEQUENCE
+
+'-------------------------------------"    Maximum Weight Alert   "-------------------------------------
+
+SEQUENCE overLimitWeight USING weightScale AND limitWeight
+    READ weightScale THEN
+        IF weightScale is GREATER THAN 1400kg THEN
+            SET weightScaleWarning TO ON THEN
+                RETURN occupantWeight
+        ELSE IF weightScale is LOWER THAN 1400kg THEN
+            SET weightScaleWarning TO OFF THEN   
+                RETURN occupantWeight
+        END IF
+END SEQUENCE 
 
 '-------------------------------------"    Residential Scenarios    "-------------------------------------
 
