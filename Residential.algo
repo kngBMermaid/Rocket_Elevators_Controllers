@@ -1,7 +1,7 @@
--------------------------------------"    Initialize Elevator System     "-------------------------------------
+'-------------------------------------"    Initialize Elevator System     "-------------------------------------
             
 
-%%%%"  Main System   "%%%%
+'-------------------------------------"  Main System   "-------------------------------------
 'This section sets the parameters of the elevator controller required to operate at idle.
         SEQUENCE startSystem
             SET numberColumn TO 1
@@ -16,7 +16,7 @@
         END SEQUENCE
 
 
-%%%%"  Elevator Battery Creation   "%%%%
+'-------------------------------------"  Elevator Battery Creation   "-------------------------------------
 
 'This section creates the battery of elevators
 
@@ -62,7 +62,7 @@
             END SEQUENCE
 
 
-%%%%"  Floor and Direction Display Screen Inside Elevator   "%%%%
+'-------------------------------------"  Floor and Direction Display Screen Inside Elevator   "-------------------------------------
 'This section makes the display screen inside the elevators present the current floor and the direction.
 
             SEQUENCE insideFloorDisplay USING elevatorFloor AND direction
@@ -72,7 +72,7 @@
             END SEQUENCE
 
 
-%%%%"  Floor and Direction Display Screen Outside Elevator   "%%%%
+'-------------------------------------"  Floor and Direction Display Screen Outside Elevator   "-------------------------------------
 'This section makes the display screen outside the elevators present the current floor and the direction.
 
             SEQUENCE outsideFloorDisplay USING elevatorFloor AND direction
@@ -82,10 +82,10 @@
             END SEQUENCE
 
 
--------------------------------------"    Doors and Elevators Status   "-------------------------------------
+'-------------------------------------"    Doors and Elevators Status   "-------------------------------------
 
 
-%%%%"  Doors Status  "%%%%
+'-------------------------------------"  Doors Status  "-------------------------------------
 'This section provides closing and opening sequences of the doors in respect with the status of the elevator.
          
             SEQUENCE openDoors USING elevator
@@ -106,7 +106,7 @@
             END SEQUENCE
 
 
-%%%%"  Elevator Status  "%%%%
+'-------------------------------------"  Elevator Status  "-------------------------------------
 'This section provides the different status an elevator can have.
 
             SEQUENCE idle USING elevator
@@ -124,10 +124,10 @@
 
 
 
--------------------------------------"    Floors Call & Elevators Call Buttons   "-------------------------------------
+'-------------------------------------"    Floors Call & Elevators Call Buttons   "-------------------------------------
 'This section translates the activation of either inside or outside button into actions.
 
-%%%%"  Elevator Call   "%%%%
+'-------------------------------------"  Elevator Call   "-------------------------------------
 'This sequence elaborates the steps that happen when an elevator is requested at a certain floor.
 
             SEQUENCE callElevator USING direction AND currentFloor
@@ -154,7 +154,7 @@
                 END FOR
             END SEQUENCE
     
-%%%%"  Floor Call   "%%%%
+'-------------------------------------"  Floor Call   "-------------------------------------
 'This sequence elaborates the steps that happen when a floor(destination) is requested for the current elevator
             
             SEQUENCE requestFloor USING direction AND currentFloor
@@ -176,7 +176,7 @@
                 END FOR
             END SEQUENCE
 
-%%%%"    Selecting the Optimal Elevator    "%%%%
+'-------------------------------------"    Selecting the Optimal Elevator    "-------------------------------------
 'This section finds which elevator is optimal to use for the Elevator Call.
 
             SEQUENCE selectOptimalElevator USING direction AND currentFloor
@@ -222,7 +222,7 @@
                     RETURN elevator
             END SEQUENCE
 
-%%%%"    Pushing and Sorting the Requested Elevator in the Floor Queue  "%%%%
+'-------------------------------------"    Pushing and Sorting the Requested Elevator in the Floor Queue  "-------------------------------------
 'This section creates a queue of floors to travel for the requested elevator to achieve its lift.
 
             SEQUENCE requestElevator USING elevator AND requestedFloor
@@ -241,7 +241,7 @@
                 END IF        
             END SEQUENCE
 
--------------------------------------"    Elevator Movements    "-------------------------------------
+'-------------------------------------"    Elevator Movements    "-------------------------------------
 'This section makes the elevators move with respect to the Floor Queue.
 
             SEQUENCE moveElevator USING elevator AND direction AND sortedFloorQueue
@@ -259,7 +259,7 @@
                 END WHILE
             END SEQUENCE
 
-%%%%"    Moving Up    "%%%%
+'-------------------------------------"    Moving Up    "-------------------------------------
 
             SEQUENCE moveUp USING elevator and requestedFloor
                 IF door is opened
@@ -273,7 +273,7 @@
                     CALL openDoors with elevator
             END SEQUENCE
                 
-%%%%"    Moving Down    "%%%%
+'-------------------------------------"    Moving Down    "-------------------------------------
 
             SEQUENCE moveDown USING elevator and requestedFloor
                 IF door is opened

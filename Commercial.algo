@@ -1,7 +1,7 @@
--------------------------------------"    Initialize Elevator System     "-------------------------------------
+'-------------------------------------"    Initialize Elevator System     "-------------------------------------
             
 
-%%%%"  Main System   "%%%%
+'-------------------------------------"  Main System   "-------------------------------------
 'This section sets the parameters of the elevator controller required to operate at idle.
 
         SEQUENCE startSystem
@@ -22,7 +22,7 @@
         END SEQUENCE
 
 
-%%%%"  Elevator Battery Creation   "%%%%
+'-------------------------------------"  Elevator Battery Creation   "-------------------------------------
 
 'This section creates the battery of elevators
 
@@ -53,18 +53,7 @@
 
             SEQUENCE createElevator USING numberFloors
                 CREATE new elevator
-                    SET elevator buttonList TO EMPTY list
-                        FOR numberFloors DO
-                            CALL createLobbyConsole WITH numberFloors
-                                ADD button TO buttonList
-                        END FOR
-            END SEQUENCE
-
-'This section creates the lobby console.
-
-            SEQUENCE createLobbyConsole USING numberFloors
-                CREATE new lobbyConsole 
-                    SET lobbyConsole buttonList TO EMPTY list
+                    SET lobbyConsoleButton buttonList TO EMPTY list
                         FOR numberFloors DO
                             CALL createLobbyConsoleButton WITH numberFloors
                                 ADD button TO buttonList
@@ -78,14 +67,14 @@
                     SET lobbyConsoleButton status TO 'OFF'
             END SEQUENCE
 
-%%%%"   Optimal Elevator Lobby Console Screen   "%%%%
+'-------------------------------------"   Optimal Elevator Lobby Console Screen   "-------------------------------------
 'This section makes the display screen on the lobby console display the right elevator for the client to use.
 
             SEQUENCE optimalElevatorDisplay USING optimalElevator
                 DISPLAY optimalElevator TO lobbyConsoleScreen
             END SEQUENCE
 
-%%%%"  Floor and Direction Display Screen Inside Elevator   "%%%%
+'-------------------------------------"  Floor and Direction Display Screen Inside Elevator   "-------------------------------------
 'This section makes the display screen inside the elevators present the current floor and the direction.
 
             SEQUENCE insideFloorDisplay USING elevatorFloor AND direction
@@ -95,7 +84,7 @@
             END SEQUENCE
 
 
-%%%%"  Floor and Direction Display Screen Outside Elevator   "%%%%
+'-------------------------------------"  Floor and Direction Display Screen Outside Elevator   "-------------------------------------
 'This section makes the display screen outside the elevators present the current floor and the direction.
 
             SEQUENCE outsideFloorDisplay USING elevatorFloor AND direction
@@ -105,10 +94,10 @@
             END SEQUENCE
 
 
--------------------------------------"    Doors and Elevators Status   "-------------------------------------
+'-------------------------------------"    Doors and Elevators Status   "-------------------------------------
 
 
-%%%%"  Doors Status  "%%%%
+'-------------------------------------"  Doors Status  "-------------------------------------
 'This section provides closing and opening sequences of the doors in respect with the status of the elevator.
          
             SEQUENCE openDoors USING elevator
@@ -129,7 +118,7 @@
             END SEQUENCE
 
 
-%%%%"  Elevator Status  "%%%%
+'-------------------------------------"  Elevator Status  "-------------------------------------
 'This section elaborates the different status an elevator can have.
 
             SEQUENCE idle USING elevator
@@ -147,7 +136,7 @@
 '-------------------------------------"   Floor Call on Lobby Console & Elevator Call Buttons   "-------------------------------------
 'This section controls what happens when the floor call on the lobby console and the elevator call buttons are activated. 
 
-%%%%"  Floor Call on Lobby Console  "%%%%
+'-------------------------------------"  Floor Call on Lobby Console  "-------------------------------------
 'This sequence elaborates the steps that happen when a destination is requested on the lobby console.
 
             SEQUENCE requestFloor USING direction AND floor
@@ -175,7 +164,7 @@
                 END FOR
             END SEQUENCE
 
-%%%%"  Elevator Call   "%%%%
+'-------------------------------------"  Elevator Call   "-------------------------------------
 'This sequence elaborates the steps that happen when an elevator is requested at a certain floor.
 
             SEQUENCE callElevator USING direction AND currentFloor
@@ -202,7 +191,7 @@
                 END FOR
             END SEQUENCE
 
-%%%%"  Selecting the Optimal Column  "%%%%
+'-------------------------------------"  Selecting the Optimal Column  "-------------------------------------
 'This section finds which of the column needs to be used by the client in respect with the destination.
 
                 SEQUENCE selectOptimalColumn USING requestedFloor
@@ -219,7 +208,7 @@
                     END FOR
                 END SEQUENCE
 
-%%%%"    Selecting the Optimal Elevator    "%%%%
+'-------------------------------------"    Selecting the Optimal Elevator    "-------------------------------------
 'This section finds which elevator is optimal to use for the Elevator Call.
 
             SEQUENCE selectOptimalElevator USING direction AND currentFloor
@@ -265,7 +254,7 @@
                     RETURN elevator
             END SEQUENCE
 
-%%%%"    Pushing and Sorting the Requested Elevator in the Floor Queue  "%%%%
+'-------------------------------------"    Pushing and Sorting the Requested Elevator in the Floor Queue  "-------------------------------------
 'This section elaborates a queue of floors to travel for the requested elevator to achieve its lift.
 
             SEQUENCE requestElevator USING elevator AND requestedFloor
@@ -284,7 +273,7 @@
                 END IF        
             END SEQUENCE
 
--------------------------------------"    Elevator Movements    "-------------------------------------
+'-------------------------------------"    Elevator Movements    "-------------------------------------
 'This section makes the elevators move with respect to the Floor Queue.
 
             SEQUENCE moveElevator USING elevator AND direction AND sortedFloorQueue
@@ -302,7 +291,7 @@
                 END WHILE
             END SEQUENCE
 
-%%%%"    Moving Up    "%%%%
+'-------------------------------------"    Moving Up    "-------------------------------------
 
             SEQUENCE moveUp USING elevator and requestedFloor
                 IF door is opened
@@ -316,7 +305,7 @@
                     CALL openDoors with elevator
             END SEQUENCE
                 
-%%%%"    Moving Down    "%%%%
+'-------------------------------------"    Moving Down    "-------------------------------------
 
             SEQUENCE moveDown USING elevator and requestedFloor
                 IF door is opened
