@@ -1,22 +1,118 @@
+-------------------------------------"    Initialize Elevator System     "-------------------------------------
+            
+
+%%%%"  Main System   "%%%%
+'This section sets the parameters of the elevator controller required to operate at idle.
+
+        SEQUENCE startSystem
+            SET numberColumn TO 4
+            SET numberElevators TO 12
+            SET numberFloors TO 66
+            SET elevatorsPerColumn TO 3
+            SET elevatorStatus TO idle
+            SET elevatorDoors TO closed
+            SET elevatorFloor TO 1
+            SET columnAFloors TO 1 AND B1 TO B6
+            SET columnBFloors TO 1 TO 20
+            SET columnCFloors TO 1 AND 21 TO 40
+            SET columnDFloors TO 1 AND 41 TO 60
+            CALL createBattery WITH numberColumns AND numberElevators AND numberFloors
+            CALL insideFloorDisplay WITH elevatorFloor AND direction
+            CALL outsideFloorDisplay WITH elevatorFloor AND direction
+        END SEQUENCE
+
+
+%%%%"  Elevator Battery Creation   "%%%%
+
+'This section creates the battery of elevators
+
+            SEQUENCE createBattery USING numberColumn AND numberElevators AND numberFloors
+                CREATE new elevator battery
+                    SET battery columnList TO EMPTY list
+                        FOR numberColumn DO 
+                            CALL createColumn WITH numberElevators AND numberFloors
+                                ADD column to battery columnList
+                        END FOR
+                
+                SET battery status TO 'ON'
+
+            END SEQUENCE
+
+'This section creates the columns in the battery.
+
+            SEQUENCE createColumn USING numberElevators AND numberFloors
+                CREATE new column
+                    SET column elevatorList TO EMPTY list
+                        FOR numberElevators DO
+                            CALL createElevator WITH numberFloors
+                                ADD elevator TO column elevatorList
+                        END FOR
+            END SEQUENCE
+
+'This section creates the elevators in the column.
+
+            SEQUENCE createElevator USING numberFloors
+                CREATE new elevator
+                    SET elevator buttonList TO EMPTY list
+                        FOR numberFloors DO
+                            CALL createFloorButton WITH numberFloors
+                                ADD button TO buttonList
+                        END FOR
+            END SEQUENCE
+
+'This section creates the floor buttons inside the elevator and sets it to off.
+
+            SEQUENCE createFloorButton USING numberFloors
+                CREATE new FloorButton
+                    SET FloorButton status TO 'OFF'
+            END SEQUENCE
+
+%%%%"   Optimal Elevator Lobby Console Screen   "%%%%
+'This section makes the display screen on the lobby console display the right elevator for the client to use.
+
+            SEQUENCE optimalElevatorDisplay USING optimalElevator
+                DISPLAY optimalElevator TO lobbyConsoleScreen
+            END SEQUENCE
+
+%%%%"  Floor and Direction Display Screen Inside Elevator   "%%%%
+'This section makes the display screen inside the elevators present the current floor and the direction.
+
+            SEQUENCE insideFloorDisplay USING elevatorFloor AND direction
+                FOR EACH elevator in elevatorList
+                    DISPLAY WITH elevatorFloor and direction TO insideElevatorScreen
+                END FOR
+            END SEQUENCE
+
+
+%%%%"  Floor and Direction Display Screen Outside Elevator   "%%%%
+'This section makes the display screen outside the elevators present the current floor and the direction.
+
+            SEQUENCE outsideFloorDisplay USING elevatorFloor AND direction
+                FOR EACH elevator in elevatorList
+                    DISPLAY WITH elevatorFloor and direction TO outsideElevatorScreen
+                END FOR
+            END SEQUENCE
+
+
 -------------------------------------"    Doors and Elevators Status   "-------------------------------------
 
 
 %%%%"  Doors Status  "%%%%
-'This section provides closing and opening properties of the doors in respect with the status of the elevator.
+'This section provides closing and opening sequences of the doors in respect with the status of the elevator.
          
             SEQUENCE openDoors USING elevator
                 IF elevator is stopped THEN 
-                    SET doors TO open
-                ELSE IF doors is opened THEN
+                    SET elevatorDoors TO open
+                ELSE IF elevatorDoors is opened THEN
                     SET timer TO 15 seconds THEN
                         CALL closeDoors WITH elevator
                 END IF
             END SEQUENCE
 
             SEQUENCE closeDoors USING elevator
-                IF doors are not blocked THEN
-                    SET doors TO closeDoor
-                ELSE IF doors are blocked THEN
+                IF elevatorDoors are not blocked THEN
+                    SET elevatorDoors TO closeDoor
+                ELSE IF elevatorDoors are blocked THEN
                     CALL openDoors WITH elevator
                 END IF
             END SEQUENCE
@@ -35,4 +131,190 @@
 
             SEQUENCE stop USING elevator 
                 SET elevatorStatus to stopped
+            END SEQUENCE
+
+-------------------------------------"   Floor Call on Lobby Console & Elevator Call Buttons   "-------------------------------------
+'This section controls what happens when the floor call on the lobby console and the elevator call buttons are activated. 
+
+%%%%"  Floor Call on Lobby Console  "%%%%
+'This sequence elaborates the steps that happen when a destination is requested on the lobby console.
+
+            SEQUENCE requestFloor USING direction AND floor
+                READ requestedFloor ON lobbyConsole
+                    CALL lobbyConsoleButton WITH direction AND currentFloor RETURNING lobbyConsoleButtonStatus
+                    CALL selectOptimalColumn WITH requestedFloor RETURNING optimalColumn
+                    CALL selectOptimalElevator WITH floor AND direction RETURNING optimalElevator
+                    CALL requestElevator WITH optimalElevator AND requestedFloor RETURNING sortedFloorQueue
+                    CALL optimalElevatorDisplay WITH optimalElevator
+                    CALL moveElevator with optimalElevator AND direction AND sortedFloorQueue
+            END SEQUENCE
+
+            SEQUENCE lobbyConsoleButton USING direction AND currentFloor
+                FOR EACH button in lobbyConsoleButton
+                    IF currentFloor is EQUAL TO buttonFloor AND direction is EQUAL TO buttonDirection THEN
+                        SET lobbyConsoleButtonStatus TO innactive
+                            RETURN lobbyConsoleButtonStatus
+                    ELSE IF currentFloor is NOT EQUAL TO buttonFloor
+                        SET lobbyConsoleButtonStatus TO active
+                            RETURN lobbyConsoleButtonStatus
+                    ELSE IF buttonDirection is NOT EQUAL TO direction
+                        SET lobbyConsoleButtonStatus TO active
+                            RETURN lobbyConsoleButtonStatus
+                    END IF
+                END FOR
+            END SEQUENCE
+
+%%%%"  Elevator Call   "%%%%
+'This sequence elaborates the steps that happen when an elevator is requested at a certain floor.
+
+            SEQUENCE callElevator USING direction AND currentFloor
+                CALL outsideButton WITH direction AND currentFloor RETURNING outsideButtonStatus
+                CALL selectOptimalElevator WITH direction AND currentFloor RETURNING optimalElevator
+                CALL requestElevator WITH elevator and requestedFloor RETURNING sortedFloorQueue
+                CALL moveElevator WITH elevator AND direction AND sortedFloorQueue
+            END SEQUENCE
+
+            SEQUENCE outsideButton USING direction AND currentFloor
+                FOR EACH button IN outsideButton
+                    IF currentFloor is EQUAL TO buttonFloor AND direction is EQUAL to buttonDirection THEN
+                        SET outsideButtonStatus TO innactive
+                        RETURN outsideButtonStatus
+
+                    ELSE IF currentFloor is NOT EQUAL TO buttonFloor
+                        SET outsideButtonStatus TO active
+                        RETURN outsideButtonStatus
+
+                    ELSE IF buttonDirection is NOT EQUAL TO direction
+                        SET outsideButtonStatus TO active
+                        RETURN outsideButtonStatus
+                    END IF
+                END FOR
+            END SEQUENCE
+
+%%%%"  Selecting the Optimal Column  "%%%%
+'This section finds which of the column needs to be used by the client in respect with the destination.
+
+                SEQUENCE selectOptimalColumn USING requestedFloor
+                    FOR EACH column IN numberColumn
+                        IF requestedFloor is EQUAL TO columnAFloors
+                            RETURN columnA
+                        ELSE IF requestedFloor is EQUAL TO columnBFloors
+                            RETURN columnB
+                        ELSE IF requestedFloor IS EQUAL TO columnCFloors
+                            RETURN columnC
+                        ELSE IF requestedFloor IS EQUAL TO columnDFloors
+                            RETURN columnD
+                        END IF
+                    END FOR
+                END SEQUENCE
+
+%%%%"    Selecting the Optimal Elevator    "%%%%
+'This section finds which elevator is optimal to use for the Elevator Call.
+
+            SEQUENCE selectOptimalElevator USING direction AND currentFloor
+                FOR EACH elevator IN optimalColumn
+                    WHILE elevator is not found
+                        FOR EACH elevator in elevatorList
+
+                            IF status is idle AND currentFloor is EQUAL TO elevatorFloor THEN
+                            RETURN elevator
+
+                            ELSE IF status is stopped AND currentFloor is EQUAL TO elevatorFloor THEN
+                            RETURN elevator
+
+                            ELSE IF status is idle AND currentFloor is NOT EQUAL TO elevatorFloor THEN
+                                CALL optimalElevator WITH currentFloor AND elevatorFloor AND direction RETURNING elevator
+                            RETURN elevator
+                          
+                            ELSE IF status is moving OR stopped AND currentFloor is HIGHER THAN elevatorFloor and direction is goingUp THEN
+                                CALL optimalElevator WITH currentFloor AND elevatorFloor AND direction RETURNING elevator
+                            RETURN elevator
+
+                            ELSE IF status is moving OR stopped AND currentFloor is LOWER THAN elevatorFloor and direction is goingDown THEN
+                                CALL optimalElevator WITH currentFloor AND elevatorFloor AND direction RETURNING elevator
+                            RETURN elevator
+
+                            END IF
+                        END FOR
+                    END WHILE
+            END SEQUENCE
+
+            SEQUENCE optimalElevator USING currentFloor AND elevatorFloor AND direction
+                COMPUTE requestDistance AS difference BETWEEN elevatorFloor AND currentFloor
+                    SET shortestDistance TO requestDistance
+                        FOR EACH elevator IN column
+                            IF direction is elevatorDirection
+                                COMPUTE distance AS difference BETWEEN elevatorFloor AND currentFloor
+                                    IF distance is LOWER THAN shortestDistance THEN
+                                        SET shortestDistance TO distance
+                                    END IF
+                            END IF
+                        END FOR
+                    DETERMINE elevator WITH smallestDistance
+                    RETURN elevator
+            END SEQUENCE
+
+%%%%"    Pushing and Sorting the Requested Elevator in the Floor Queue  "%%%%
+'This section elaborates a queue of floors to travel for the requested elevator to achieve its lift.
+
+            SEQUENCE requestElevator USING elevator AND requestedFloor
+                ADD requestedFloor TO floorQueue
+                    CALL sortFloorQueue WITH floorQueue AND direction RETURNING sortedFloorQueue
+                    SET floorQueue TO sortedFloorQueue
+            END SEQUENCE
+
+            SEQUENCE sortFloorQueue USING floorQueue AND direction
+                IF direction is goingUp THEN
+                    COMPUTE floorQueue by ascending
+                    RETURN sortedFloorQueue
+                ELSE IF direction is goingDown THEN
+                    COMPUTE floorQueue by descending
+                    RETURN sortedFloorQueue
+                END IF        
+            END SEQUENCE
+
+-------------------------------------"    Elevator Movements    "-------------------------------------
+'This section makes the elevators move with respect to the Floor Queue.
+
+            SEQUENCE moveElevator USING elevator AND direction AND sortedFloorQueue
+                WHILE sortedFloorQueue has at least 1 floor
+                    READ requestedFloor FROM sortedFloorQueue
+                        IF elevatorFloor is EQUAL TO requestedFloor THEN
+                            CALL openDoors WITH elevator
+
+                        ELSE IF elevatorFloor is LOWER THAN requestedFloor THEN
+                            CALL moveUp WITH elevator AND requestedFloor
+
+                        ELSE IF elevatorFloor is GREATER THAN requestedFloor
+                            CALL moveDown WITH elevator AND requestedFloor
+                        END IF
+                END WHILE
+            END SEQUENCE
+
+%%%%"    Moving Up    "%%%%
+
+            SEQUENCE moveUp USING elevator and requestedFloor
+                IF door is opened
+                    CALL closeDoors WITH elevator
+                END IF
+                
+                    CALL move WITH elevator
+                        COMPUTE elevatorFloor is EQUAL TO elevatorFloor + 1
+                        UNTIL elevatorFloor is EQUAL TO requestedFloor
+                    CALL stop WITH elevator
+                    CALL openDoors with elevator
+            END SEQUENCE
+                
+%%%%"    Moving Down    "%%%%
+
+            SEQUENCE moveDown USING elevator and requestedFloor
+                IF door is opened
+                    CALL closeDoors WITH elevator
+                END IF
+                
+                    CALL move WITH elevator
+                        COMPUTE elevatorFloor is EQUAL TO elevatorFloor - 1
+                        UNTIL elevatorFloor is EQUAL TO requestedFloor
+                    CALL stop WITH elevator
+                    CALL openDoors with elevator
             END SEQUENCE
