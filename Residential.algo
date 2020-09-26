@@ -125,8 +125,6 @@
             END SEQUENCE
 
 
-
-
 '-------------------------------------"    Floors Call & Elevators Call Buttons   "-------------------------------------
 'This section translates the activation of either inside or outside button into actions.
 
