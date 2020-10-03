@@ -1,8 +1,10 @@
+#-------------------------------------"    Allows the creation of pauses when running the code     "-------------------------------------
+
 import time
 
 #-------------------------------------"    Initialize Elevator System     "-------------------------------------
 
-class ElevatorController:
+class elevatorController:
     def __init__(self, numberFloor, numberElevator):
         self.numberFloor = numberFloor
         self.numberElevator = numberElevator
@@ -149,7 +151,7 @@ class Elevator:
             print("Floor : ", self.elevatorFloor)
             time.sleep(1)
 
-#-------------------------------------"    Moving Up    "-------------------------------------
+#-------------------------------------"    Moving Down    "-------------------------------------
 
     def moveDown(self, requestedFloor):
         print("Floor : ", self.elevatorFloor)
@@ -160,14 +162,14 @@ class Elevator:
 
             time.sleep(1)
 
-class Call_button:
+class elevatorCallButton:
     def __init__(self, floorNumber, direction):
         self.floorNumber = floorNumber
         self.direction = direction
         self.light = False
 
 
-class Floor_button:
+class floorCallButton:
     def __init__(self, requestedFloor):
         self.requestedFloor = requestedFloor
 
@@ -183,66 +185,72 @@ class Column:
 
 
 
+def testScenario1():
+
+    controller = elevatorController(10, 2)
+
+    controller.column.elevatorList[0].elevatorFloor = 2
+    controller.column.elevatorList[0].status = "moving"
+    controller.column.elevatorList[0].elevatordirection = "down"
+
+    controller.column.elevatorList[1].elevatorFloor = 6
+    controller.column.elevatorList[1].status = "moving"
+    controller.column.elevatorList[1].elevatordirection = "down"
+
+    elevator = controller.callElevator(5, "up")
+    controller.callFloor(elevator, 7)
+
+    print("==================================")
+    print("Scenario 1 Ended")
+    print("==================================")
+
+def testScenario2():
 
 
+    controller = elevatorController(10, 2)
+
+    controller.column.elevatorList[0].elevatorFloor = 10
+    controller.column.elevatorList[0].status = "moving"
+    controller.column.elevatorList[0].elevatordirection = "down"
+
+    controller.column.elevatorList[1].elevatorFloor = 3
+    controller.column.elevatorList[1].status = "moving"
+    controller.column.elevatorList[1].elevatordirection = "down"
 
 
+    elevator = controller.callElevator(1, "up")
+    controller.callFloor(elevator, 6)
+    elevator = controller.callElevator(3, "up")
+    controller.callFloor(elevator, 5)
+    elevator = controller.callElevator(9, "down")
+    controller.callFloor(elevator, 2)
 
+    print("==================================")
+    print("Scenario 2 Ended")
+    print("==================================")
+    
+def testScenario3():
 
+    controller = elevatorController(10, 2)
 
-#-------------------------------------"    Scenario 1    "-------------------------------------
+    controller.column.elevatorList[0].elevatorFloor = 10
+    controller.column.elevatorList[0].status = "moving"
+    controller.column.elevatorList[0].elevatordirection = "down"
 
-controller = ElevatorController(10, 2)
+    controller.column.elevatorList[1].elevatorFloor = 3
+    controller.column.elevatorList[1].status = "moving"
+    controller.column.elevatorList[1].elevatordirection = "down"
 
-controller.column.elevatorList[0].elevatorFloor = 2
-controller.column.elevatorList[0].status = "moving"
-controller.column.elevatorList[0].elevatordirection = "down"
+    print(controller.column.elevatorList)
+    elevator = controller.callElevator(10, "down")
+    controller.callFloor(elevator, 3)
+    elevator = controller.callElevator(3, "down")
+    controller.callFloor(elevator, 2)
 
-controller.column.elevatorList[1].elevatorFloor = 6
-controller.column.elevatorList[1].status = "moving"
-controller.column.elevatorList[1].elevatordirection = "down"
+    print("==================================")
+    print("Scenario 3 Ended")
+    print("==================================")
 
-elevator = controller.callElevator(5, "up")
-controller.callFloor(elevator, 7)
-
-
-#-------------------------------------"    Scenario 2    "-------------------------------------
-
-
-# controller = ElevatorController(10, 2)
-
-# controller.column.elevatorList[0].elevatorFloor = 10
-# controller.column.elevatorList[0].status = "moving"
-# controller.column.elevatorList[0].elevatordirection = "down"
-
-# controller.column.elevatorList[1].elevatorFloor = 3
-# controller.column.elevatorList[1].status = "moving"
-# controller.column.elevatorList[1].elevatordirection = "down"
-
-
-# elevator = controller.callElevator(1, "up")
-# controller.callFloor(elevator, 6)
-# elevator = controller.callElevator(3, "up")
-# controller.callFloor(elevator, 5)
-# elevator = controller.callElevator(9, "down")
-# controller.callFloor(elevator, 2)
-
-
-#-------------------------------------"    Scenario 3    "-------------------------------------
-
-
-# controller = ElevatorController(10, 2)
-
-# controller.column.elevatorList[0].elevatorFloor = 10
-# controller.column.elevatorList[0].status = "moving"
-# controller.column.elevatorList[0].elevatordirection = "down"
-
-# controller.column.elevatorList[1].elevatorFloor = 3
-# controller.column.elevatorList[1].status = "moving"
-# controller.column.elevatorList[1].elevatordirection = "down"
-
-# print(controller.column.elevatorList)
-# elevator = controller.callElevator(10, "down")
-# controller.callFloor(elevator, 3)
-# elevator = controller.callElevator(3, "down")
-# controller.callFloor(elevator, 2)
+testScenario1()
+#testScenario2()
+#testScenario3()
