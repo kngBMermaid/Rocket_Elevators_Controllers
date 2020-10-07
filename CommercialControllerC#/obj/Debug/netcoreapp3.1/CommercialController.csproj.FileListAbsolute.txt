@@ -1,0 +1,13 @@
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\bin\Debug\netcoreapp3.1\CommercialController.exe
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\bin\Debug\netcoreapp3.1\CommercialController.deps.json
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\bin\Debug\netcoreapp3.1\CommercialController.runtimeconfig.json
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\bin\Debug\netcoreapp3.1\CommercialController.runtimeconfig.dev.json
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\bin\Debug\netcoreapp3.1\CommercialController.dll
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\bin\Debug\netcoreapp3.1\CommercialController.pdb
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\obj\Debug\netcoreapp3.1\CommercialController.csprojAssemblyReference.cache
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\obj\Debug\netcoreapp3.1\CommercialController.AssemblyInfoInputs.cache
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\obj\Debug\netcoreapp3.1\CommercialController.AssemblyInfo.cs
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\obj\Debug\netcoreapp3.1\CommercialController.csproj.CoreCompileInputs.cache
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\obj\Debug\netcoreapp3.1\CommercialController.dll
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\obj\Debug\netcoreapp3.1\CommercialController.pdb
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\obj\Debug\netcoreapp3.1\CommercialController.genruntimeconfig.cache
