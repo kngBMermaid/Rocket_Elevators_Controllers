@@ -69,6 +69,15 @@ public class Column
             }
         }
     }
+     public Elevator SelectOptimalColumn(int id) 
+    {                       
+        for (int i = 0; i < this.elevatorList.Count; i++) {
+            if (this.elevatorList[i].id == id) {
+                return this.elevatorList[i];
+            }
+        }
+        return null;
+    } 
     public Elevator SelectOptimalElevator(int requestedFloor, string direction)
     {
         int shortestDistance = numberFloors;
