@@ -309,15 +309,14 @@ public class ElevatorController
 
         public void MoveUp(int RequestedFloor, char columnNumber)
         {
-            Console.WriteLine("Column: " + columnNumber + " Elevator: " + elevatorNumber + "  Current Floor: " + this.elevatorFloor);
+            Console.WriteLine("Column: " + columnNumber + " Elevator: " + elevatorNumber + "  Floor: " + this.elevatorFloor);
             Thread.Sleep(700);
-            Console.WriteLine("====================================================");
             while (this.elevatorFloor != RequestedFloor)
             {
                 this.elevatorFloor += 1;
                 Console.WriteLine("Column: " + columnNumber + " Elevator: " + elevatorNumber + "  Floor: " + this.elevatorFloor);
 
-                Thread.Sleep(250);
+                Thread.Sleep(200);
             }
           
         }
@@ -326,16 +325,15 @@ public class ElevatorController
 
         public void MoveDown(int RequestedFloor, char columnNumber)
         {
-            Console.WriteLine("Column: " + columnNumber + " Elevator: " + elevatorNumber + "  Current Floor: " + this.elevatorFloor);
+            Console.WriteLine("Column: " + columnNumber + " Elevator: " + elevatorNumber + "  Floor: " + this.elevatorFloor);
             Thread.Sleep(700);
-            Console.WriteLine("====================================================");
 
             while (this.elevatorFloor != RequestedFloor)
             {
                 this.elevatorFloor -= 1;
                 Console.WriteLine("Column: " + columnNumber + " Elevator: " + elevatorNumber + "  Floor: " + this.elevatorFloor);
 
-                Thread.Sleep(250);
+                Thread.Sleep(200);
             }
             Console.WriteLine("====================================================");
 
