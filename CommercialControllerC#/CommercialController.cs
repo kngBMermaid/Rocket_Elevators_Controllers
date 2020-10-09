@@ -376,16 +376,12 @@ public class ElevatorController
     {
         public static void Main(string[] args)
         {
-         
-            
-        
-        
+                
+//-------------------------------------"   Scenario 1   "-------------------------------------  
+
         void Scenario1() 
         {
-        
             ElevatorController controller = new ElevatorController(66, 4, 5, "down");
-
-//-------------------------------------"   Scenario 1   "-------------------------------------
 
             controller.battery.columnList[1].elevatorList[0].elevatorFloor = 26;
             controller.battery.columnList[1].elevatorList[0].elevatorDirection = "down";
@@ -421,12 +417,12 @@ public class ElevatorController
 
             controller.RequestElevator(26);
         }
-        void Scenario2() 
-        {
-        
-            ElevatorController controller = new ElevatorController(66, 4, 5, "down");
 
 //-------------------------------------"   Scenario 2   "-------------------------------------
+
+        void Scenario2() 
+        {
+            ElevatorController controller = new ElevatorController(66, 4, 5, "down");
 
             controller.battery.columnList[3].elevatorList[0].elevatorFloor = 7;
             controller.battery.columnList[3].elevatorList[0].elevatorDirection = "up";
@@ -459,13 +455,12 @@ public class ElevatorController
 
             controller.RequestElevator(42);
         }
-        
+
+//-------------------------------------"   Scenario 3   "------------------------------------- 
+
         void Scenario3() 
         {
-        
             ElevatorController controller = new ElevatorController(66, 4, 5, "down");   
-
-//-------------------------------------"   Scenario 3   "-------------------------------------
 
             controller.battery.columnList[2].elevatorList[0].elevatorFloor = 64;
             controller.battery.columnList[2].elevatorList[0].elevatorDirection = "down";
