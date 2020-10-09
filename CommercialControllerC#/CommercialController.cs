@@ -28,29 +28,33 @@ public class ElevatorController
     public Elevator RequestElevatorReturning(int FloorNumber, int RequestedFloor)
     {
         Thread.Sleep(200);
+        Console.WriteLine("Call Button Activated");
+        Console.WriteLine("====================================================");
         Console.WriteLine("Request elevator to floor : " + FloorNumber);
         Console.WriteLine("====================================================");
         Thread.Sleep(200);
-        Console.WriteLine("Call Button Activated");
-        Console.WriteLine("====================================================");
         var column = battery.SelectAppropriateColumn(FloorNumber);
         userDirection = "down";
         var elevator = column.selectOptimalElevatorReturning(FloorNumber, userDirection);
         if (elevator.elevatorFloor > FloorNumber)
         {
             elevator.addtoFloorQueue(FloorNumber, column.columnNumber);
+            Console.WriteLine("Lobby Button Activated");
+            Console.WriteLine("====================================================");
             elevator.addtoFloorQueue(RequestedFloor, column.columnNumber);
         }
 
         else if (elevator.elevatorFloor < FloorNumber)
         {
-            //elevator.MoveUp(FloorNumber, column.columnNumber);
+           
             elevator.addtoFloorQueue(FloorNumber, column.columnNumber);
+            Console.WriteLine("Lobby Button Activated");
+            Console.WriteLine("====================================================");
             elevator.addtoFloorQueue(RequestedFloor, column.columnNumber);
         }
-        Console.WriteLine("Button Disactivated");
 
         return elevator;
+        
     }
 
 //-------------------------------------"    User Requests Elevator From Lobby   "-------------------------------------
@@ -194,7 +198,10 @@ public class ElevatorController
                 {
                     return elevator;
                 }
-
+                else if (elevator.status == "stopped" || FloorNumber == RequestedFloor)
+                {
+                    return elevator;
+                }
             var optimalElevator = 0;
             var smallestDistance = 1000;
             for (var i = 0; i < this.elevatorList.Count; i++)
@@ -265,32 +272,31 @@ public class ElevatorController
             else if (RequestedFloor < this.elevatorFloor)
             {
                 status = "moving";
-                Console.WriteLine("Button Disactivated");
-                Console.WriteLine("====================================================");
-                Console.WriteLine("Column : " + columnNumber + " Elevator : " + this.elevatorNumber + " " + status);
+                Console.WriteLine("Column: " + columnNumber + " Elevator: " + this.elevatorNumber + " is " + status);
                 Console.WriteLine("====================================================");
                 this.elevatorDirection = "down";
                 MoveDown(RequestedFloor, columnNumber);
                 this.status = "stopped";
-                Console.WriteLine("Column : " + columnNumber + " Elevator : " + this.elevatorNumber + " " + status);
-
+                Console.WriteLine("Column: " + columnNumber + " Elevator: " + this.elevatorNumber + " has " + status);
+                Console.WriteLine("====================================================");
+                Console.WriteLine("Button Disactivated");
+                
                 this.OpenDoors();
                 this.floorQueue.Remove(0);
             }
             else if (RequestedFloor > this.elevatorFloor)
             {
-                Thread.Sleep(300);
+                Thread.Sleep(700);
                 this.status = "moving";
-                Console.WriteLine("Button Disactivated");
-                Console.WriteLine("====================================================");
-                Console.WriteLine("Column : " + columnNumber + " Elevator : " + this.elevatorNumber + " " + status);
+                Console.WriteLine("Column: " + columnNumber + " Elevator: " + this.elevatorNumber + " is " + status);
                 Console.WriteLine("====================================================");
                 this.elevatorDirection = "up";
                 this.MoveUp(RequestedFloor, columnNumber);
                 this.status = "stopped";
                 Console.WriteLine("====================================================");
-                Console.WriteLine("Column : " + columnNumber + " Elevator : " + this.elevatorNumber + " " + status);
-
+                Console.WriteLine("Column: " + columnNumber + " Elevator: " + this.elevatorNumber + " has " + status);
+                Console.WriteLine("====================================================");
+                Console.WriteLine("Button Disactivated");
 
                 this.OpenDoors();
 
@@ -303,32 +309,33 @@ public class ElevatorController
 
         public void MoveUp(int RequestedFloor, char columnNumber)
         {
-            Console.WriteLine("Column : " + columnNumber + " Elevator : #" + elevatorNumber + "  Current Floor : " + this.elevatorFloor);
-            Thread.Sleep(300);
+            Console.WriteLine("Column: " + columnNumber + " Elevator: " + elevatorNumber + "  Current Floor: " + this.elevatorFloor);
+            Thread.Sleep(700);
             Console.WriteLine("====================================================");
             while (this.elevatorFloor != RequestedFloor)
             {
                 this.elevatorFloor += 1;
-                Console.WriteLine("Column : " + columnNumber + " Elevator : #" + elevatorNumber + "  Floor : " + this.elevatorFloor);
+                Console.WriteLine("Column: " + columnNumber + " Elevator: " + elevatorNumber + "  Floor: " + this.elevatorFloor);
 
-                Thread.Sleep(100);
+                Thread.Sleep(250);
             }
+          
         }
 
 //-------------------------------------"    Moving Down  "-------------------------------------
 
         public void MoveDown(int RequestedFloor, char columnNumber)
         {
-            Console.WriteLine("Column : " + columnNumber + " Elevator : #" + elevatorNumber + "  Current Floor : " + this.elevatorFloor);
-            Thread.Sleep(300);
+            Console.WriteLine("Column: " + columnNumber + " Elevator: " + elevatorNumber + "  Current Floor: " + this.elevatorFloor);
+            Thread.Sleep(700);
             Console.WriteLine("====================================================");
 
             while (this.elevatorFloor != RequestedFloor)
             {
                 this.elevatorFloor -= 1;
-                Console.WriteLine("Column : " + columnNumber + " Elevator : #" + elevatorNumber + "  Floor : " + this.elevatorFloor);
+                Console.WriteLine("Column: " + columnNumber + " Elevator: " + elevatorNumber + "  Floor: " + this.elevatorFloor);
 
-                Thread.Sleep(100);
+                Thread.Sleep(250);
             }
             Console.WriteLine("====================================================");
 
@@ -338,14 +345,14 @@ public class ElevatorController
 
         public void OpenDoors()
         {
-            Thread.Sleep(300);
+            Thread.Sleep(700);
 
             Console.WriteLine("====================================================");
             Console.WriteLine("Doors Opening");
 
-            Thread.Sleep(300);
+            Thread.Sleep(700);
             Console.WriteLine("Doors are Opened");
-            Thread.Sleep(300);
+            Thread.Sleep(700);
 
             this.CloseDoors();
         }
@@ -354,9 +361,9 @@ public class ElevatorController
             if (doorClearance == true)
             {
                 Console.WriteLine("Doors Closing");
-                Thread.Sleep(300);
+                Thread.Sleep(700);
                 Console.WriteLine("Doors are Closed");
-                Thread.Sleep(300);
+                Thread.Sleep(700);
 
 
                 Console.WriteLine("====================================================");
@@ -425,7 +432,7 @@ public class ElevatorController
 
             controller.battery.columnList[2].elevatorList[0].elevatorFloor = 1;
             controller.battery.columnList[2].elevatorList[0].elevatorDirection = "up";
-            controller.battery.columnList[2].elevatorList[0].status = "idle";
+            controller.battery.columnList[2].elevatorList[0].status = "stopped";
             controller.battery.columnList[2].elevatorList[0].floorQueue.Add(21);
 
 
@@ -492,12 +499,12 @@ public class ElevatorController
 
 
 
-            controller.RequestElevatorReturning(60, 7);
+            controller.RequestElevatorReturning(54, 1);
         }
     
         //Scenario1();
-        Scenario2();
-        //Scenario3();
+        //Scenario2();
+        Scenario3();
         }
     }
 
