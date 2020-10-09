@@ -44,7 +44,7 @@ public class ElevatorController
 
         else if (elevator.elevatorFloor < FloorNumber)
         {
-            elevator.MoveUp(FloorNumber, column.columnNumber);
+            //elevator.MoveUp(FloorNumber, column.columnNumber);
             elevator.addtoFloorQueue(FloorNumber, column.columnNumber);
             elevator.addtoFloorQueue(RequestedFloor, column.columnNumber);
         }
@@ -65,10 +65,9 @@ public class ElevatorController
         Column column = battery.SelectAppropriateColumn(RequestedFloor);
         userDirection = "up";
         var FloorNumber = 1;
-        Elevator elevator = column.selectOptimalElevator(RequestedFloor, FloorNumber, userDirection);
+        var elevator = column.selectOptimalElevator(RequestedFloor, FloorNumber, userDirection);
 
         elevator.addtoFloorQueue(FloorNumber, column.columnNumber);
-
         elevator.addtoFloorQueue(RequestedFloor, column.columnNumber);
 
 
@@ -381,7 +380,7 @@ public class ElevatorController
 
         void Scenario1() 
         {
-            ElevatorController controller = new ElevatorController(66, 4, 5, "down");
+            ElevatorController controller = new ElevatorController(66, 4, 5, "up");
 
             controller.battery.columnList[1].elevatorList[0].elevatorFloor = 20;
             controller.battery.columnList[1].elevatorList[0].elevatorDirection = "down";
@@ -422,38 +421,38 @@ public class ElevatorController
 
         void Scenario2() 
         {
-            ElevatorController controller = new ElevatorController(66, 4, 5, "down");
+            ElevatorController controller = new ElevatorController(66, 4, 5, "up");
 
-            controller.battery.columnList[3].elevatorList[0].elevatorFloor = 7;
-            controller.battery.columnList[3].elevatorList[0].elevatorDirection = "up";
-            controller.battery.columnList[3].elevatorList[0].status = "stopped";
-            controller.battery.columnList[3].elevatorList[0].floorQueue.Add(27);
-
-
-            controller.battery.columnList[3].elevatorList[1].elevatorFloor = 29;
-            controller.battery.columnList[3].elevatorList[1].elevatorDirection = "up";
-            controller.battery.columnList[3].elevatorList[1].status = "moving";
-            controller.battery.columnList[3].elevatorList[1].floorQueue.Add(34);
+            controller.battery.columnList[2].elevatorList[0].elevatorFloor = 1;
+            controller.battery.columnList[2].elevatorList[0].elevatorDirection = "up";
+            controller.battery.columnList[2].elevatorList[0].status = "idle";
+            controller.battery.columnList[2].elevatorList[0].floorQueue.Add(21);
 
 
-            controller.battery.columnList[3].elevatorList[2].elevatorFloor = 39;
-            controller.battery.columnList[3].elevatorList[2].elevatorDirection = "down";
-            controller.battery.columnList[3].elevatorList[2].status = "moving";
-            controller.battery.columnList[3].elevatorList[2].floorQueue.Add(7);
+            controller.battery.columnList[2].elevatorList[1].elevatorFloor = 23;
+            controller.battery.columnList[2].elevatorList[1].elevatorDirection = "up";
+            controller.battery.columnList[2].elevatorList[1].status = "moving";
+            controller.battery.columnList[2].elevatorList[1].floorQueue.Add(28);
 
 
-            controller.battery.columnList[3].elevatorList[3].elevatorFloor = 46;
-            controller.battery.columnList[3].elevatorList[3].elevatorDirection = "down";
-            controller.battery.columnList[3].elevatorList[3].status = "moving";
-            controller.battery.columnList[3].elevatorList[3].floorQueue.Add(30);
+            controller.battery.columnList[2].elevatorList[2].elevatorFloor = 33;
+            controller.battery.columnList[2].elevatorList[2].elevatorDirection = "down";
+            controller.battery.columnList[2].elevatorList[2].status = "moving";
+            controller.battery.columnList[2].elevatorList[2].floorQueue.Add(1);
 
 
-            controller.battery.columnList[3].elevatorList[4].elevatorFloor = 45;
-            controller.battery.columnList[3].elevatorList[4].elevatorDirection = "down";
-            controller.battery.columnList[3].elevatorList[4].status = "moving";
-            controller.battery.columnList[3].elevatorList[4].floorQueue.Add(7);
+            controller.battery.columnList[2].elevatorList[3].elevatorFloor = 40;
+            controller.battery.columnList[2].elevatorList[3].elevatorDirection = "down";
+            controller.battery.columnList[2].elevatorList[3].status = "moving";
+            controller.battery.columnList[2].elevatorList[3].floorQueue.Add(24);
 
-            controller.RequestElevator(42);
+
+            controller.battery.columnList[2].elevatorList[4].elevatorFloor = 39;
+            controller.battery.columnList[2].elevatorList[4].elevatorDirection = "down";
+            controller.battery.columnList[2].elevatorList[4].status = "moving";
+            controller.battery.columnList[2].elevatorList[4].floorQueue.Add(1);
+
+            controller.RequestElevator(36);
         }
 
 //-------------------------------------"   Scenario 3   "------------------------------------- 
@@ -462,42 +461,42 @@ public class ElevatorController
         {
             ElevatorController controller = new ElevatorController(66, 4, 5, "down");   
 
-            controller.battery.columnList[2].elevatorList[0].elevatorFloor = 64;
-            controller.battery.columnList[2].elevatorList[0].elevatorDirection = "down";
-            controller.battery.columnList[2].elevatorList[0].status = "moving";
-            controller.battery.columnList[2].elevatorList[0].floorQueue.Add(7);
+            controller.battery.columnList[3].elevatorList[0].elevatorFloor = 58;
+            controller.battery.columnList[3].elevatorList[0].elevatorDirection = "down";
+            controller.battery.columnList[3].elevatorList[0].status = "moving";
+            controller.battery.columnList[3].elevatorList[0].floorQueue.Add(1);
 
 
-            controller.battery.columnList[2].elevatorList[1].elevatorFloor = 56;
-            controller.battery.columnList[2].elevatorList[1].elevatorDirection = "up";
-            controller.battery.columnList[2].elevatorList[1].status = "moving";
-            controller.battery.columnList[2].elevatorList[1].floorQueue.Add(66);
+            controller.battery.columnList[3].elevatorList[1].elevatorFloor = 50;
+            controller.battery.columnList[3].elevatorList[1].elevatorDirection = "up";
+            controller.battery.columnList[3].elevatorList[1].status = "moving";
+            controller.battery.columnList[3].elevatorList[1].floorQueue.Add(60);
 
 
-            controller.battery.columnList[2].elevatorList[2].elevatorFloor = 52;
-            controller.battery.columnList[2].elevatorList[2].elevatorDirection = "up";
-            controller.battery.columnList[2].elevatorList[2].status = "moving";
-            controller.battery.columnList[2].elevatorList[2].floorQueue.Add(64);
+            controller.battery.columnList[3].elevatorList[2].elevatorFloor = 46;
+            controller.battery.columnList[3].elevatorList[2].elevatorDirection = "up";
+            controller.battery.columnList[3].elevatorList[2].status = "moving";
+            controller.battery.columnList[3].elevatorList[2].floorQueue.Add(58);
 
 
-            controller.battery.columnList[2].elevatorList[3].elevatorFloor = 7;
-            controller.battery.columnList[2].elevatorList[3].elevatorDirection = "up";
-            controller.battery.columnList[2].elevatorList[3].status = "moving";
-            controller.battery.columnList[2].elevatorList[3].floorQueue.Add(60);
+            controller.battery.columnList[3].elevatorList[3].elevatorFloor = 1;
+            controller.battery.columnList[3].elevatorList[3].elevatorDirection = "up";
+            controller.battery.columnList[3].elevatorList[3].status = "moving";
+            controller.battery.columnList[3].elevatorList[3].floorQueue.Add(54);
 
 
-            controller.battery.columnList[2].elevatorList[4].elevatorFloor = 66;
-            controller.battery.columnList[2].elevatorList[4].elevatorDirection = "down";
-            controller.battery.columnList[2].elevatorList[4].status = "moving";
-            controller.battery.columnList[2].elevatorList[4].floorQueue.Add(7);
+            controller.battery.columnList[3].elevatorList[4].elevatorFloor = 60;
+            controller.battery.columnList[3].elevatorList[4].elevatorDirection = "down";
+            controller.battery.columnList[3].elevatorList[4].status = "moving";
+            controller.battery.columnList[3].elevatorList[4].floorQueue.Add(1);
 
 
 
             controller.RequestElevatorReturning(60, 7);
         }
     
-        Scenario1();
-        //Scenario2();
+        //Scenario1();
+        Scenario2();
         //Scenario3();
         }
     }
