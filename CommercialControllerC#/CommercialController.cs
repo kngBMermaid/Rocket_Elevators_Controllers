@@ -64,7 +64,7 @@ public class ElevatorController
 
         Column column = battery.SelectAppropriateColumn(RequestedFloor);
         userDirection = "up";
-        var FloorNumber = 7;
+        var FloorNumber = 1;
         Elevator elevator = column.selectOptimalElevator(RequestedFloor, FloorNumber, userDirection);
 
         elevator.addtoFloorQueue(FloorNumber, column.columnNumber);
@@ -113,24 +113,24 @@ public class ElevatorController
             Column appropriateColumn = null;
             foreach (Column column in columnList)
             {
-                if (RequestedFloor > 1 && RequestedFloor <= 6 || RequestedFloor == 7)
+                if (RequestedFloor > -6 && RequestedFloor <= -1 || RequestedFloor == 1)
                 {
                     appropriateColumn = columnList[0];
                 }
-                else if (RequestedFloor >= 7 && RequestedFloor <= 26 || RequestedFloor == 7)
+                else if (RequestedFloor >= 1 && RequestedFloor <= 20 || RequestedFloor == 1)
                 {
 
                     appropriateColumn = columnList[1];
 
 
                 }
-                else if (RequestedFloor >= 27 && RequestedFloor <= 46 || RequestedFloor == 7)
+                else if (RequestedFloor >= 21 && RequestedFloor <= 40 || RequestedFloor == 1)
                 {
                     appropriateColumn = columnList[2];
 
 
                 }
-                else if (RequestedFloor >= 47 && RequestedFloor <= 66 || RequestedFloor == 7)
+                else if (RequestedFloor >= 41 && RequestedFloor <= 60 || RequestedFloor == 1)
                 {
                     appropriateColumn = columnList[3];
 
@@ -383,39 +383,39 @@ public class ElevatorController
         {
             ElevatorController controller = new ElevatorController(66, 4, 5, "down");
 
-            controller.battery.columnList[1].elevatorList[0].elevatorFloor = 26;
+            controller.battery.columnList[1].elevatorList[0].elevatorFloor = 20;
             controller.battery.columnList[1].elevatorList[0].elevatorDirection = "down";
             controller.battery.columnList[1].elevatorList[0].status = "moving";
-            controller.battery.columnList[1].elevatorList[0].floorQueue.Add(11);
+            controller.battery.columnList[1].elevatorList[0].floorQueue.Add(5);
 
 
-            controller.battery.columnList[1].elevatorList[1].elevatorFloor = 9;
+            controller.battery.columnList[1].elevatorList[1].elevatorFloor = 3;
             controller.battery.columnList[1].elevatorList[1].elevatorDirection = "up";
             controller.battery.columnList[1].elevatorList[1].status = "moving";
-            controller.battery.columnList[1].elevatorList[1].floorQueue.Add(21);
+            controller.battery.columnList[1].elevatorList[1].floorQueue.Add(15);
 
 
-            controller.battery.columnList[1].elevatorList[2].elevatorFloor = 19;
+            controller.battery.columnList[1].elevatorList[2].elevatorFloor = 13;
             controller.battery.columnList[1].elevatorList[2].elevatorDirection = "down";
             controller.battery.columnList[1].elevatorList[2].status = "moving";
-            controller.battery.columnList[1].elevatorList[2].floorQueue.Add(7);
+            controller.battery.columnList[1].elevatorList[2].floorQueue.Add(1);
 
 
-            controller.battery.columnList[1].elevatorList[3].elevatorFloor = 21;
+            controller.battery.columnList[1].elevatorList[3].elevatorFloor = 15;
             controller.battery.columnList[1].elevatorList[3].elevatorDirection = "down";
             controller.battery.columnList[1].elevatorList[3].status = "moving";
-            controller.battery.columnList[1].elevatorList[3].floorQueue.Add(8);
+            controller.battery.columnList[1].elevatorList[3].floorQueue.Add(2);
            
 
 
-            controller.battery.columnList[1].elevatorList[4].elevatorFloor = 12;
+            controller.battery.columnList[1].elevatorList[4].elevatorFloor = 6;
             controller.battery.columnList[1].elevatorList[4].elevatorDirection = "down";
             controller.battery.columnList[1].elevatorList[4].status = "moving";
-            controller.battery.columnList[1].elevatorList[4].floorQueue.Add(7);
+            controller.battery.columnList[1].elevatorList[4].floorQueue.Add(1);
 
 
 
-            controller.RequestElevator(26);
+            controller.RequestElevator(20);
         }
 
 //-------------------------------------"   Scenario 2   "-------------------------------------
