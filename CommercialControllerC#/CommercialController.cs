@@ -34,7 +34,6 @@ public class ElevatorController
         Console.WriteLine("====================================================");
         Thread.Sleep(200);
         var column = battery.SelectAppropriateColumn(FloorNumber);
-        userDirection = "down";
         var elevator = column.selectOptimalElevatorReturning(FloorNumber, userDirection);
         if (elevator.elevatorFloor > FloorNumber)
         {
@@ -45,6 +44,7 @@ public class ElevatorController
         }
         else if (elevator.elevatorFloor < FloorNumber)
         {
+            
             elevator.addtoFloorQueue(FloorNumber, column.columnNumber);
             Console.WriteLine("Lobby Button Activated");
             Console.WriteLine("====================================================");
@@ -64,7 +64,6 @@ public class ElevatorController
         Thread.Sleep(200);
 
         Column column = battery.SelectAppropriateColumn(RequestedFloor);
-        userDirection = "up";
         var FloorNumber = 1;
         var elevator = column.selectOptimalElevator(RequestedFloor, FloorNumber, userDirection);
 
@@ -495,11 +494,53 @@ public class ElevatorController
 
 
             controller.RequestElevatorReturning(54, 1);
+            
         }
-    
-        Scenario1();
+
+//-------------------------------------"   Scenario 3   "------------------------------------- 
+
+        void Scenario4() 
+        {
+            ElevatorController controller = new ElevatorController(66, 4, 5, "up");   
+
+            controller.battery.columnList[0].elevatorList[0].elevatorFloor = -4;
+            //controller.battery.columnList[3].elevatorList[0].elevatorDirection = "down";
+            controller.battery.columnList[0].elevatorList[0].status = "idle";
+            //controller.battery.columnList[3].elevatorList[0].floorQueue.Add(1);
+
+
+            controller.battery.columnList[0].elevatorList[1].elevatorFloor = 1;
+            //controller.battery.columnList[3].elevatorList[1].elevatorDirection = "up";
+            controller.battery.columnList[0].elevatorList[1].status = "idle";
+            //controller.battery.columnList[3].elevatorList[1].floorQueue.Add(60);
+
+
+            controller.battery.columnList[0].elevatorList[2].elevatorFloor = -3;
+            controller.battery.columnList[0].elevatorList[2].elevatorDirection = "down";
+            controller.battery.columnList[0].elevatorList[2].status = "moving";
+            controller.battery.columnList[0].elevatorList[2].floorQueue.Add(-5);
+
+
+            controller.battery.columnList[0].elevatorList[3].elevatorFloor = -6;
+            controller.battery.columnList[0].elevatorList[3].elevatorDirection = "up";
+            controller.battery.columnList[0].elevatorList[3].status = "moving";
+            controller.battery.columnList[0].elevatorList[3].floorQueue.Add(1);
+
+
+            controller.battery.columnList[0].elevatorList[4].elevatorFloor = -1;
+            controller.battery.columnList[0].elevatorList[4].elevatorDirection = "down";
+            controller.battery.columnList[0].elevatorList[4].status = "moving";
+            controller.battery.columnList[0].elevatorList[4].floorQueue.Add(-6);
+
+
+
+            controller.RequestElevatorReturning(-3, 1);
+            
+        }
+        //Scenario1();
         //Scenario2();
         //Scenario3();
+        Scenario4();
         }
     }
 

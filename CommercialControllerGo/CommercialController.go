@@ -9,16 +9,16 @@ import (
 //-------------------------------------"    Main System Structure   "-------------------------------------
 
 type ElevatorController struct {
-	numberBatteries int
-	batteries       []Battery
-	numberColumns   int
+	numberBattery int
+	battery       []Battery
+	numberColumn   int
 	userDirection  string
 }
 
 //-------------------------------------"    Battery Structure   "-------------------------------------
 
 type Battery struct {
-	numberColumns int
+	numberColumn int
 	columnList   []Column
 }
 
@@ -34,32 +34,33 @@ type Column struct {
 
 type Elevator struct {
 	elevatorNumber        int
-	elevatorPosition  int
+	elevatorFloor  int
 	floorQueue        []int
 	elevatorStatus    string
 	elevatorDirection string
 	doorClearance       bool
 	column             Column
+	columnNumber               int
 }
 
 //-------------------------------------"    Creating the Battery for the Main System  "-------------------------------------
 
-func NewController(numberBatteries int) ElevatorController {
+func NewController(numberBattery int) *ElevatorController {
 	controller := new(ElevatorController)
-	controller.numberBatteries = 1
-	for index := 0; index < numberBatteries; index++ {
+	controller.numberBattery = 1
+	for index := 0; index < numberBattery; index++ {
 		battery := NewBattery(index)
-		controller.batteries = append(controller.batteries, *battery)
+		controller.battery = append(controller.battery, *battery)
 	}
-	return *controller
+	return controller
 }
 
 //-------------------------------------"    Creating the Column in the Battery  "-------------------------------------
 
-func NewBattery(numberColumns int) *Battery {
+func NewBattery(numberColumn int) *Battery {
 	battery := new(Battery)
-	battery.numberColumns = 4
-	for index := 0; index < battery.numberColumns; index++ {
+	battery.numberColumn = 4
+	for index := 0; index < battery.numberColumn; index++ {
 		column := NewColumn(index)
 		battery.columnList = append(battery.columnList, *column)
 	}
@@ -82,7 +83,7 @@ func NewColumn(elevatorPerColumn int) *Column {
 
 func NewElevator() *Elevator {
 	elevator := new(Elevator)
-	elevator.elevatorPosition = 1
+	elevator.elevatorFloor = 1
 	elevator.floorQueue = []int{}
 	elevator.elevatorStatus = "idle"
 	elevator.elevatorDirection = "up"
@@ -95,8 +96,7 @@ func NewElevator() *Elevator {
 func (controller *ElevatorController) RequestElevatorReturning(FloorNumber, RequestedFloor int) Elevator {
 	fmt.Println("Elevator Requested on Floor : ", FloorNumber)
 	time.Sleep(300 * time.Millisecond)
-	fmt.Println("Button Light On")
-	var column = controller.batteries[0].SelectAppropriateColumn(FloorNumber)
+	var column = controller.battery[0].SelectAppropriateColumn(FloorNumber)
 	controller.userDirection = "down"
 	var elevator = column.SelectOptimalElevator(RequestedFloor, controller.userDirection)
 	elevator.addtoFloorQueue(FloorNumber)
@@ -109,8 +109,7 @@ func (controller *ElevatorController) RequestElevatorReturning(FloorNumber, Requ
 func (controller *ElevatorController) RequestElevator(RequestedFloor int) Elevator {
 	fmt.Println("Request elevator to floor : ", RequestedFloor)
 	time.Sleep(3 * time.Millisecond)
-	fmt.Println("Button Light On")
-	column := controller.batteries[0].SelectAppropriateColumn(RequestedFloor)
+	column := controller.battery[0].SelectAppropriateColumn(RequestedFloor)
 	controller.userDirection = "up"
 	var elevator = column.SelectOptimalElevator(RequestedFloor, controller.userDirection)
 	var FloorNumber = 1
@@ -122,13 +121,13 @@ func (controller *ElevatorController) RequestElevator(RequestedFloor int) Elevat
 //-------------------------------------"    Selecting the Appropriate Column  "-------------------------------------
 
 func (b *Battery) SelectAppropriateColumn(RequestedFloor int) Column { // not sure about *
-	if RequestedFloor > 0 && RequestedFloor <= 22 {
+	if RequestedFloor > -6 && RequestedFloor <= 1 {
 		return b.columnList[0]
-	} else if RequestedFloor > 22 && RequestedFloor <= 43 {
+	} else if RequestedFloor > 1 && RequestedFloor <= 20 {
 		return b.columnList[1]
-	} else if RequestedFloor > 43 && RequestedFloor <= 64 {
+	} else if RequestedFloor > 21 && RequestedFloor <= 40 {
 		return b.columnList[2]
-	} else if RequestedFloor > 64 && RequestedFloor <= 85 {
+	} else if RequestedFloor > 41 && RequestedFloor <= 60 {
 		return b.columnList[3]
 	}
 	return b.columnList[3]
@@ -139,7 +138,7 @@ func (b *Battery) SelectAppropriateColumn(RequestedFloor int) Column { // not su
 func (c *Column) SelectOptimalElevator(RequestedFloor int, userDirection string) Elevator {
 	var optimalElevator = c.elevatorList[0]
 	for _, e := range c.elevatorList {
-		if RequestedFloor < e.elevatorPosition && e.elevatorDirection == "down" && userDirection == "down" {
+		if RequestedFloor < e.elevatorFloor && e.elevatorDirection == "down" && userDirection == "down" {
 			optimalElevator = e
 		} else if e.elevatorStatus == "idle" {
 			optimalElevator = e
@@ -156,10 +155,10 @@ func (c *Column) SelectOptimalElevator(RequestedFloor int, userDirection string)
 
 func (e *Elevator) addtoFloorQueue(RequestedFloor int) {
 	e.floorQueue = append(e.floorQueue, RequestedFloor)
-	if RequestedFloor > e.elevatorPosition {
+	if RequestedFloor > e.elevatorFloor {
 
 		sort.Ints(e.floorQueue)
-	} else if RequestedFloor < e.elevatorPosition {
+	} else if RequestedFloor < e.elevatorFloor {
 
 		sort.Sort(sort.Reverse(sort.IntSlice(e.floorQueue)))
 	}
@@ -169,15 +168,15 @@ func (e *Elevator) addtoFloorQueue(RequestedFloor int) {
 //-------------------------------------"    Moving the Elevator   "-------------------------------------
 
 func (e *Elevator) MoveElevator(RequestedFloor int) {
-	if RequestedFloor == e.elevatorPosition {
+	if RequestedFloor == e.elevatorFloor {
 		e.OpenDoors()
-	} else if RequestedFloor > e.elevatorPosition {
+	} else if RequestedFloor > e.elevatorFloor {
 		e.elevatorStatus = "moving"
 		e.moveUp(RequestedFloor)
 		e.elevatorStatus = "stopped"
 		e.OpenDoors()
 		e.elevatorStatus = "moving"
-	} else if RequestedFloor < e.elevatorPosition {
+	} else if RequestedFloor < e.elevatorFloor {
 		e.elevatorStatus = "moving"
 		e.moveDown(RequestedFloor)
 		e.elevatorStatus = "stopped"
@@ -189,32 +188,32 @@ func (e *Elevator) MoveElevator(RequestedFloor int) {
 //-------------------------------------"    Moving Up  "-------------------------------------
 
 func (e *Elevator) moveUp(RequestedFloor int) {
-	fmt.Println("Column : ", e.column.columnNumber, " Elevator : #", e.elevatorNumber, " Current Floor :", e.elevatorPosition)
-	for RequestedFloor > e.elevatorPosition {
-		e.elevatorPosition += 1
-		if RequestedFloor == e.elevatorPosition {
+	fmt.Println("Column : ", e.columnNumber, " Elevator : #", e.elevatorNumber, " Current Floor :", e.elevatorFloor)
+	for RequestedFloor > e.elevatorFloor {
+		e.elevatorFloor += 1
+		if RequestedFloor == e.elevatorFloor {
 			time.Sleep(1 * time.Second)
 			fmt.Println("======================================")
-			fmt.Println("Column : ", e.column.columnNumber, " Elevator : #", e.elevatorNumber, " Arrived at Requested Floor : ", e.elevatorPosition)
+			fmt.Println("Column : ", e.columnNumber, " Elevator : #", e.elevatorNumber, " Arrived at Requested Floor : ", e.elevatorFloor)
 		}
 		time.Sleep(300 * time.Millisecond)
-		fmt.Println("Column : ", e.column.columnNumber, " Elevator : #", e.elevatorNumber, " Floor : ", e.elevatorPosition)
+		fmt.Println("Column : ", e.columnNumber, " Elevator : #", e.elevatorNumber, " Floor : ", e.elevatorFloor)
 	}
 }
 
 //-------------------------------------"    Moving Down   "-------------------------------------
 
 func (e *Elevator) moveDown(RequestedFloor int) {
-	fmt.Println("Column : ", e.column.columnNumber, " Elevator : #", e.elevatorNumber, " Current Floor :", e.elevatorPosition)
-	for RequestedFloor < e.elevatorPosition {
-		e.elevatorPosition -= 1
-		if RequestedFloor == e.elevatorPosition {
+	fmt.Println("Column : ", e.columnNumber, " Elevator : #", e.elevatorNumber, " Current Floor :", e.elevatorFloor)
+	for RequestedFloor < e.elevatorFloor {
+		e.elevatorFloor -= 1
+		if RequestedFloor == e.elevatorFloor {
 			time.Sleep(1 * time.Second)
 			fmt.Println("======================================")
-			fmt.Println("Column : ", e.column.columnNumber, " Elevator : #", e.elevatorNumber, " Arrived at Requested Floor : ", e.elevatorPosition)
+			fmt.Println("Column : ", e.columnNumber, " Elevator : #", e.elevatorNumber, " Arrived at Requested Floor : ", e.elevatorFloor)
 		}
 		time.Sleep(300 * time.Millisecond)
-		fmt.Println("Column : ", e.column.columnNumber, " Elevator : #", e.elevatorNumber, " Floor : ", e.elevatorPosition)
+		fmt.Println("Column : ", e.columnNumber, " Elevator : #", e.elevatorNumber, " Floor : ", e.elevatorFloor)
 	}
 }
 
@@ -226,7 +225,6 @@ func (e *Elevator) OpenDoors() {
 	time.Sleep(1 * time.Second)
 	fmt.Println("Doors are Open")
 	time.Sleep(1 * time.Second)
-	fmt.Println("Button Light Off")
 	e.CloseDoors()
 }
 func (e *Elevator) CloseDoors() {
@@ -244,8 +242,40 @@ func (e *Elevator) CloseDoors() {
 
 //-------------------------------------"    Testing Scenario   "-------------------------------------
 
+func (controller *ElevatorController) TestScenario1() {
+	
+
+	controller.battery[0].columnList[1].elevatorList[0].elevatorFloor = 20
+	controller.battery[0].columnList[1].elevatorList[0].elevatorDirection = "down"
+	controller.battery[0].columnList[1].elevatorList[0].elevatorStatus = "moving"
+	controller.battery[0].columnList[1].elevatorList[0].floorQueue = append(controller.battery[0].columnList[1].elevatorList[0].floorQueue, 5)
+
+	controller.battery[0].columnList[1].elevatorList[1].elevatorFloor = 3
+	controller.battery[0].columnList[1].elevatorList[1].elevatorDirection = "up"
+	controller.battery[0].columnList[1].elevatorList[1].elevatorStatus = "moving"
+	controller.battery[0].columnList[1].elevatorList[1].floorQueue = append(controller.battery[0].columnList[1].elevatorList[1].floorQueue, 15)
+
+	controller.battery[0].columnList[1].elevatorList[2].elevatorFloor = 13
+	controller.battery[0].columnList[1].elevatorList[2].elevatorDirection = "down"
+	controller.battery[0].columnList[1].elevatorList[2].elevatorStatus = "moving"
+	controller.battery[0].columnList[1].elevatorList[2].floorQueue = append(controller.battery[0].columnList[1].elevatorList[2].floorQueue, 1)
+
+	controller.battery[0].columnList[1].elevatorList[3].elevatorFloor = 15
+	controller.battery[0].columnList[1].elevatorList[3].elevatorDirection = "down"
+	controller.battery[0].columnList[1].elevatorList[3].elevatorStatus = "moving"
+	controller.battery[0].columnList[1].elevatorList[3].floorQueue = append(controller.battery[0].columnList[1].elevatorList[3].floorQueue, 2)
+
+	controller.battery[0].columnList[1].elevatorList[4].elevatorFloor = 6
+	controller.battery[0].columnList[1].elevatorList[4].elevatorDirection = "down"
+	controller.battery[0].columnList[1].elevatorList[4].elevatorStatus = "moving"
+	controller.battery[0].columnList[1].elevatorList[4].floorQueue = append(controller.battery[0].columnList[1].elevatorList[4].floorQueue, 1)
+	
+	controller.RequestElevator(20)
+}
+
+
+
 func main() {
 	controller := NewController(1)
-	controller.RequestElevator(36)
-	controller.RequestElevatorReturning(33, 1)
+	controller.TestScenario1()
 }
