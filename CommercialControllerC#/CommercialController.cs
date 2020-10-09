@@ -43,28 +43,25 @@ public class ElevatorController
             Console.WriteLine("====================================================");
             elevator.addtoFloorQueue(RequestedFloor, column.columnNumber);
         }
-
         else if (elevator.elevatorFloor < FloorNumber)
         {
-           
             elevator.addtoFloorQueue(FloorNumber, column.columnNumber);
             Console.WriteLine("Lobby Button Activated");
             Console.WriteLine("====================================================");
             elevator.addtoFloorQueue(RequestedFloor, column.columnNumber);
         }
-
-        return elevator;
-        
+        return elevator;  
     }
 
 //-------------------------------------"    User Requests Elevator From Lobby   "-------------------------------------
     public Elevator RequestElevator(int RequestedFloor)
     {
         Thread.Sleep(200);
-        Console.WriteLine("Requested floor : " + RequestedFloor);
-        Thread.Sleep(200);
+        Console.WriteLine("Requested Elevator for Floor : " + RequestedFloor);
+        Console.WriteLine("====================================================");
         Console.WriteLine("Call Button Activated");
-
+        Console.WriteLine("====================================================");
+        Thread.Sleep(200);
 
         Column column = battery.SelectAppropriateColumn(RequestedFloor);
         userDirection = "up";
@@ -72,9 +69,9 @@ public class ElevatorController
         var elevator = column.selectOptimalElevator(RequestedFloor, FloorNumber, userDirection);
 
         elevator.addtoFloorQueue(FloorNumber, column.columnNumber);
+        Console.WriteLine("Call Button Activated");
+        Console.WriteLine("====================================================");
         elevator.addtoFloorQueue(RequestedFloor, column.columnNumber);
-
-
 
         return elevator;
     }
@@ -500,9 +497,9 @@ public class ElevatorController
             controller.RequestElevatorReturning(54, 1);
         }
     
-        //Scenario1();
+        Scenario1();
         //Scenario2();
-        Scenario3();
+        //Scenario3();
         }
     }
 
