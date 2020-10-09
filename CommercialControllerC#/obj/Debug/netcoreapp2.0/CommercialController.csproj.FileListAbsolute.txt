@@ -1,0 +1,9 @@
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\bin\Debug\netcoreapp2.0\CommercialController.deps.json
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\bin\Debug\netcoreapp2.0\CommercialController.dll
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\bin\Debug\netcoreapp2.0\CommercialController.pdb
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\obj\Debug\netcoreapp2.0\CommercialController.csprojAssemblyReference.cache
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\obj\Debug\netcoreapp2.0\CommercialController.AssemblyInfoInputs.cache
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\obj\Debug\netcoreapp2.0\CommercialController.AssemblyInfo.cs
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\obj\Debug\netcoreapp2.0\CommercialController.csproj.CoreCompileInputs.cache
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\obj\Debug\netcoreapp2.0\CommercialController.dll
+C:\Users\Louis\Desktop\Genesis\RocketElevatorController\CommercialControllerC#\obj\Debug\netcoreapp2.0\CommercialController.pdb
