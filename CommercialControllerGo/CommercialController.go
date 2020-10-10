@@ -186,30 +186,30 @@ func (e *Elevator) MoveElevator(RequestedFloor int) {
 //-------------------------------------"    Moving Up  "-------------------------------------
 
 func (e *Elevator) moveUp(RequestedFloor int) {
-	fmt.Println("Column : ", e.columnNumber, " Elevator : #", e.elevatorNumber, " Current Floor :", e.elevatorFloor)
+	fmt.Println("Column: ", e.columnNumber, " Elevator: ", e.elevatorNumber, " Current Floor:", e.elevatorFloor)
 	for RequestedFloor > e.elevatorFloor {
 		e.elevatorFloor += 1
 		if RequestedFloor == e.elevatorFloor {
 			time.Sleep(1 * time.Second)
 			fmt.Println("======================================")
-			fmt.Println("Column : ", e.columnNumber, " Elevator : #", e.elevatorNumber, " Arrived at Requested Floor : ", e.elevatorFloor)
+			fmt.Println("Column: ", e.columnNumber, " Elevator: ", e.elevatorNumber, " Arrived at Requested Floor: ", e.elevatorFloor)
 		}
-		fmt.Println("Column : ", e.columnNumber, " Elevator : #", e.elevatorNumber, " Floor : ", e.elevatorFloor)
+		fmt.Println("Column: ", e.columnNumber, " Elevator: ", e.elevatorNumber, " Floor: ", e.elevatorFloor)
 	}
 }
 
 //-------------------------------------"    Moving Down   "-------------------------------------
 
 func (e *Elevator) moveDown(RequestedFloor int) {
-	fmt.Println("Column : ", e.columnNumber, " Elevator : #", e.elevatorNumber, " Current Floor :", e.elevatorFloor)
+	fmt.Println("Column: ", e.columnNumber, " Elevator: ", e.elevatorNumber, " Current Floor:", e.elevatorFloor)
 	for RequestedFloor < e.elevatorFloor {
 		e.elevatorFloor -= 1
 		if RequestedFloor == e.elevatorFloor {
 			time.Sleep(1 * time.Second)
 			fmt.Println("======================================")
-			fmt.Println("Column : ", e.columnNumber, " Elevator : #", e.elevatorNumber, " Arrived at Requested Floor : ", e.elevatorFloor)
+			fmt.Println("Column: ", e.columnNumber, " Elevator: ", e.elevatorNumber, " Arrived at Requested Floor: ", e.elevatorFloor)
 		}
-		fmt.Println("Column : ", e.columnNumber, " Elevator : #", e.elevatorNumber, " Floor : ", e.elevatorFloor)
+		fmt.Println("Column: ", e.columnNumber, " Elevator: ", e.elevatorNumber, " Floor: ", e.elevatorFloor)
 	}
 }
 
@@ -218,13 +218,13 @@ func (e *Elevator) moveDown(RequestedFloor int) {
 func (e *Elevator) OpenDoors() {
 	fmt.Println("======================================")
 	fmt.Println("Doors Opening")
-	fmt.Println("Doors are Open")
+	fmt.Println("Doors are Opened")
 	e.CloseDoors()
 }
 func (e *Elevator) CloseDoors() {
 	if e.doorClearance== true {
 		fmt.Println("Doors Closing")
-		fmt.Println("Doors are Close")
+		fmt.Println("Doors are Closed")
 		fmt.Println("======================================")
 	} else if e.doorClearance{
 		e.OpenDoors()

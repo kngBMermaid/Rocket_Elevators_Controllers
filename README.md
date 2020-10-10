@@ -13,3 +13,9 @@ For ResidentialController.js
     -right click and "Run Code"
 For ResidentialController.py
     -right click and "Run Python File in Terminal"
+
+# WEEK 3
+C# and Golang files have been added to the repository for week 3
+
+In order to run the different scenarios, scroll down to the bottom of each files and un-comment the scenario
+you want to run.
