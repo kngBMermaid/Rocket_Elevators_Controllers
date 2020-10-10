@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"sort"
-	"time"
 )
 
 //-------------------------------------"    Main System Structure   "-------------------------------------
@@ -190,7 +189,6 @@ func (e *Elevator) moveUp(RequestedFloor int) {
 	for RequestedFloor > e.elevatorFloor {
 		e.elevatorFloor += 1
 		if RequestedFloor == e.elevatorFloor {
-			time.Sleep(1 * time.Second)
 			fmt.Println("======================================")
 			fmt.Println("Column: ", e.columnNumber, " Elevator: ", e.elevatorNumber, " Arrived at Requested Floor: ", e.elevatorFloor)
 		}
@@ -205,7 +203,6 @@ func (e *Elevator) moveDown(RequestedFloor int) {
 	for RequestedFloor < e.elevatorFloor {
 		e.elevatorFloor -= 1
 		if RequestedFloor == e.elevatorFloor {
-			time.Sleep(1 * time.Second)
 			fmt.Println("======================================")
 			fmt.Println("Column: ", e.columnNumber, " Elevator: ", e.elevatorNumber, " Arrived at Requested Floor: ", e.elevatorFloor)
 		}
