@@ -39,7 +39,7 @@ type Elevator struct {
 	elevatorStatus    string
 	elevatorDirection string
 	doorClearance       bool
-	column             Column
+	column             int
 	columnNumber               int
 }
 
@@ -48,8 +48,8 @@ type Elevator struct {
 func NewController(numberBattery int) *ElevatorController {
 	controller := new(ElevatorController)
 	controller.numberBattery = 1
-	for index := 0; index < numberBattery; index++ {
-		battery := NewBattery(index)
+	for i := 0; i < numberBattery; i++ {
+		battery := NewBattery(i)
 		controller.battery = append(controller.battery, *battery)
 	}
 	return controller
@@ -60,8 +60,8 @@ func NewController(numberBattery int) *ElevatorController {
 func NewBattery(numberColumn int) *Battery {
 	battery := new(Battery)
 	battery.numberColumn = 4
-	for index := 0; index < battery.numberColumn; index++ {
-		column := NewColumn(index)
+	for i := 0; i < battery.numberColumn; i++ {
+		column := NewColumn(i)
 		battery.columnList = append(battery.columnList, *column)
 	}
 	return battery
@@ -72,7 +72,7 @@ func NewBattery(numberColumn int) *Battery {
 func NewColumn(elevatorPerColumn int) *Column {
 	column := new(Column)
 	column.elevatorPerColumn = 5
-	for index := 0; index < column.elevatorPerColumn; index++ {
+	for i := 0; i < column.elevatorPerColumn; i++ {
 		elevator := NewElevator()
 		column.elevatorList = append(column.elevatorList, *elevator)
 	}
@@ -95,7 +95,6 @@ func NewElevator() *Elevator {
 
 func (controller *ElevatorController) RequestElevatorReturning(FloorNumber, RequestedFloor int) Elevator {
 	fmt.Println("Elevator Requested on Floor : ", FloorNumber)
-	time.Sleep(300 * time.Millisecond)
 	var column = controller.battery[0].SelectAppropriateColumn(FloorNumber)
 	controller.userDirection = "down"
 	var elevator = column.SelectOptimalElevator(RequestedFloor, controller.userDirection)
@@ -108,7 +107,6 @@ func (controller *ElevatorController) RequestElevatorReturning(FloorNumber, Requ
 
 func (controller *ElevatorController) RequestElevator(RequestedFloor int) Elevator {
 	fmt.Println("Request elevator to floor : ", RequestedFloor)
-	time.Sleep(3 * time.Millisecond)
 	column := controller.battery[0].SelectAppropriateColumn(RequestedFloor)
 	controller.userDirection = "up"
 	var elevator = column.SelectOptimalElevator(RequestedFloor, controller.userDirection)
@@ -196,7 +194,6 @@ func (e *Elevator) moveUp(RequestedFloor int) {
 			fmt.Println("======================================")
 			fmt.Println("Column : ", e.columnNumber, " Elevator : #", e.elevatorNumber, " Arrived at Requested Floor : ", e.elevatorFloor)
 		}
-		time.Sleep(300 * time.Millisecond)
 		fmt.Println("Column : ", e.columnNumber, " Elevator : #", e.elevatorNumber, " Floor : ", e.elevatorFloor)
 	}
 }
@@ -212,7 +209,6 @@ func (e *Elevator) moveDown(RequestedFloor int) {
 			fmt.Println("======================================")
 			fmt.Println("Column : ", e.columnNumber, " Elevator : #", e.elevatorNumber, " Arrived at Requested Floor : ", e.elevatorFloor)
 		}
-		time.Sleep(300 * time.Millisecond)
 		fmt.Println("Column : ", e.columnNumber, " Elevator : #", e.elevatorNumber, " Floor : ", e.elevatorFloor)
 	}
 }
@@ -222,28 +218,23 @@ func (e *Elevator) moveDown(RequestedFloor int) {
 func (e *Elevator) OpenDoors() {
 	fmt.Println("======================================")
 	fmt.Println("Doors Opening")
-	time.Sleep(1 * time.Second)
 	fmt.Println("Doors are Open")
-	time.Sleep(1 * time.Second)
 	e.CloseDoors()
 }
 func (e *Elevator) CloseDoors() {
 	if e.doorClearance== true {
 		fmt.Println("Doors Closing")
-		time.Sleep(1 * time.Second)
 		fmt.Println("Doors are Close")
-		time.Sleep(1 * time.Second)
 		fmt.Println("======================================")
-		time.Sleep(1 * time.Second)
 	} else if e.doorClearance{
 		e.OpenDoors()
 	}
 }
 
-//-------------------------------------"    Testing Scenario   "-------------------------------------
+//-------------------------------------"    Scenario 1   "-------------------------------------
 
 func (controller *ElevatorController) TestScenario1() {
-	
+
 
 	controller.battery[0].columnList[1].elevatorList[0].elevatorFloor = 20
 	controller.battery[0].columnList[1].elevatorList[0].elevatorDirection = "down"
@@ -273,9 +264,106 @@ func (controller *ElevatorController) TestScenario1() {
 	controller.RequestElevator(20)
 }
 
+//-------------------------------------"    Scenario 2   "-------------------------------------
+
+func (controller *ElevatorController) TestScenario2() {
+
+
+	controller.battery[0].columnList[2].elevatorList[0].elevatorFloor = 1
+	controller.battery[0].columnList[2].elevatorList[0].elevatorDirection = "up"
+	controller.battery[0].columnList[2].elevatorList[0].elevatorStatus = "stopped"
+	controller.battery[0].columnList[2].elevatorList[0].floorQueue = append(controller.battery[0].columnList[2].elevatorList[0].floorQueue, 21)
+
+	controller.battery[0].columnList[2].elevatorList[1].elevatorFloor = 23
+	controller.battery[0].columnList[2].elevatorList[1].elevatorDirection = "up"
+	controller.battery[0].columnList[2].elevatorList[1].elevatorStatus = "moving"
+	controller.battery[0].columnList[2].elevatorList[1].floorQueue = append(controller.battery[0].columnList[2].elevatorList[1].floorQueue, 28)
+
+	controller.battery[0].columnList[2].elevatorList[2].elevatorFloor = 33
+	controller.battery[0].columnList[2].elevatorList[2].elevatorDirection = "down"
+	controller.battery[0].columnList[2].elevatorList[2].elevatorStatus = "moving"
+	controller.battery[0].columnList[2].elevatorList[2].floorQueue = append(controller.battery[0].columnList[2].elevatorList[2].floorQueue, 1)
+
+	controller.battery[0].columnList[2].elevatorList[3].elevatorFloor = 40
+	controller.battery[0].columnList[2].elevatorList[3].elevatorDirection = "down"
+	controller.battery[0].columnList[2].elevatorList[3].elevatorStatus = "moving"
+	controller.battery[0].columnList[2].elevatorList[3].floorQueue = append(controller.battery[0].columnList[2].elevatorList[3].floorQueue, 24)
+
+	controller.battery[0].columnList[2].elevatorList[4].elevatorFloor = 39
+	controller.battery[0].columnList[2].elevatorList[4].elevatorDirection = "down"
+	controller.battery[0].columnList[2].elevatorList[4].elevatorStatus = "moving"
+	controller.battery[0].columnList[2].elevatorList[4].floorQueue = append(controller.battery[0].columnList[2].elevatorList[4].floorQueue, 1)
+	
+	controller.RequestElevator(36)
+}
+
+//-------------------------------------"    Scenario 3   "-------------------------------------
+
+func (controller *ElevatorController) TestScenario3() {
+
+
+	controller.battery[0].columnList[3].elevatorList[0].elevatorFloor = 58
+	controller.battery[0].columnList[3].elevatorList[0].elevatorDirection = "down"
+	controller.battery[0].columnList[3].elevatorList[0].elevatorStatus = "moving"
+	controller.battery[0].columnList[3].elevatorList[0].floorQueue = append(controller.battery[0].columnList[3].elevatorList[0].floorQueue, 1)
+
+	controller.battery[0].columnList[3].elevatorList[1].elevatorFloor = 50
+	controller.battery[0].columnList[3].elevatorList[1].elevatorDirection = "up"
+	controller.battery[0].columnList[3].elevatorList[1].elevatorStatus = "moving"
+	controller.battery[0].columnList[3].elevatorList[1].floorQueue = append(controller.battery[0].columnList[3].elevatorList[1].floorQueue, 60)
+
+	controller.battery[0].columnList[3].elevatorList[2].elevatorFloor = 46
+	controller.battery[0].columnList[3].elevatorList[2].elevatorDirection = "up"
+	controller.battery[0].columnList[3].elevatorList[2].elevatorStatus = "moving"
+	controller.battery[0].columnList[3].elevatorList[2].floorQueue = append(controller.battery[0].columnList[3].elevatorList[2].floorQueue, 58)
+
+	controller.battery[0].columnList[3].elevatorList[3].elevatorFloor = 1
+	controller.battery[0].columnList[3].elevatorList[3].elevatorDirection = "up"
+	controller.battery[0].columnList[3].elevatorList[3].elevatorStatus = "moving"
+	controller.battery[0].columnList[3].elevatorList[3].floorQueue = append(controller.battery[0].columnList[3].elevatorList[3].floorQueue, 54)
+
+	controller.battery[0].columnList[3].elevatorList[4].elevatorFloor = 60
+	controller.battery[0].columnList[3].elevatorList[4].elevatorDirection = "down"
+	controller.battery[0].columnList[3].elevatorList[4].elevatorStatus = "moving"
+	controller.battery[0].columnList[3].elevatorList[4].floorQueue = append(controller.battery[0].columnList[3].elevatorList[4].floorQueue, 1)
+	
+	controller.RequestElevator(36)
+}
+
+//-------------------------------------"    Scenario 4   "-------------------------------------
+
+func (controller *ElevatorController) TestScenario4() {
+
+
+	controller.battery[0].columnList[0].elevatorList[0].elevatorFloor = -4
+	controller.battery[0].columnList[0].elevatorList[0].elevatorStatus = "idle"
+
+	controller.battery[0].columnList[0].elevatorList[1].elevatorFloor = 1
+	controller.battery[0].columnList[0].elevatorList[1].elevatorStatus = "idle"
+
+	controller.battery[0].columnList[0].elevatorList[2].elevatorFloor = -3
+	controller.battery[0].columnList[0].elevatorList[2].elevatorDirection = "down"
+	controller.battery[0].columnList[0].elevatorList[2].elevatorStatus = "moving"
+	controller.battery[0].columnList[0].elevatorList[2].floorQueue = append(controller.battery[0].columnList[0].elevatorList[2].floorQueue, -5)
+
+	controller.battery[0].columnList[0].elevatorList[3].elevatorFloor = -6
+	controller.battery[0].columnList[0].elevatorList[3].elevatorDirection = "up"
+	controller.battery[0].columnList[0].elevatorList[3].elevatorStatus = "moving"
+	controller.battery[0].columnList[0].elevatorList[3].floorQueue = append(controller.battery[0].columnList[0].elevatorList[3].floorQueue, 1)
+
+	controller.battery[0].columnList[0].elevatorList[4].elevatorFloor = -1
+	controller.battery[0].columnList[0].elevatorList[4].elevatorDirection = "down"
+	controller.battery[0].columnList[0].elevatorList[4].elevatorStatus = "moving"
+	controller.battery[0].columnList[0].elevatorList[4].floorQueue = append(controller.battery[0].columnList[0].elevatorList[4].floorQueue, -6)
+	
+	controller.RequestElevator(36)
+}
 
 
 func main() {
 	controller := NewController(1)
 	controller.TestScenario1()
+	//controller.TestScenario2()
+	//controller.TestScenario3()
+	//controller.TestScenario4()
 }

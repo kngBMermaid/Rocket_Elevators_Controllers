@@ -25,7 +25,7 @@ public class ElevatorController
 
 //-------------------------------------"    User Requests Elevator to Return to Lobby   "-------------------------------------
 
-    public Elevator RequestElevatorReturning(int FloorNumber, int RequestedFloor)
+    public Elevator AssignElevator(int FloorNumber, int RequestedFloor)
     {
         Thread.Sleep(200);
         Console.WriteLine("Call Button Activated");
@@ -34,7 +34,7 @@ public class ElevatorController
         Console.WriteLine("====================================================");
         Thread.Sleep(200);
         var column = battery.SelectAppropriateColumn(FloorNumber);
-        var elevator = column.selectOptimalElevatorReturning(FloorNumber, userDirection);
+        var elevator = column.selectOptimalElevatorToAssign(FloorNumber, userDirection);
         if (elevator.elevatorFloor > FloorNumber)
         {
             elevator.addtoFloorQueue(FloorNumber, column.columnNumber);
@@ -168,7 +168,7 @@ public class ElevatorController
 
 //-------------------------------------"    Selecting the Optimal Elevator  "-------------------------------------
 
-        public Elevator selectOptimalElevatorReturning(int RequestedFloor, string userDirection)
+        public Elevator selectOptimalElevatorToAssign(int RequestedFloor, string userDirection)
         {
             var smallestDistance = 999;
             var optimalElevator = 0;
@@ -493,7 +493,7 @@ public class ElevatorController
 
 
 
-            controller.RequestElevatorReturning(54, 1);
+            controller.AssignElevator(54, 1);
             
         }
 
@@ -504,15 +504,11 @@ public class ElevatorController
             ElevatorController controller = new ElevatorController(66, 4, 5, "up");   
 
             controller.battery.columnList[0].elevatorList[0].elevatorFloor = -4;
-            //controller.battery.columnList[3].elevatorList[0].elevatorDirection = "down";
             controller.battery.columnList[0].elevatorList[0].status = "idle";
-            //controller.battery.columnList[3].elevatorList[0].floorQueue.Add(1);
 
 
             controller.battery.columnList[0].elevatorList[1].elevatorFloor = 1;
-            //controller.battery.columnList[3].elevatorList[1].elevatorDirection = "up";
             controller.battery.columnList[0].elevatorList[1].status = "idle";
-            //controller.battery.columnList[3].elevatorList[1].floorQueue.Add(60);
 
 
             controller.battery.columnList[0].elevatorList[2].elevatorFloor = -3;
@@ -534,13 +530,13 @@ public class ElevatorController
 
 
 
-            controller.RequestElevatorReturning(-3, 1);
+            controller.AssignElevator(-3, 1);
             
         }
-        //Scenario1();
+        Scenario1();
         //Scenario2();
         //Scenario3();
-        Scenario4();
+        //Scenario4();
         }
     }
 

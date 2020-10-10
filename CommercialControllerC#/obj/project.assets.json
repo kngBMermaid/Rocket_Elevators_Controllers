@@ -13,9 +13,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Louis\\Desktop\\Genesis\\RocketElevatorController\\CommercialControllerC#\\CommercialController.csproj",
-      "projectName": "CommercialController",
-      "projectPath": "C:\\Users\\Louis\\Desktop\\Genesis\\RocketElevatorController\\CommercialControllerC#\\CommercialController.csproj",
+      "projectUniqueName": "C:\\Users\\Louis\\Desktop\\Genesis\\RocketElevatorController\\CommercialControllerC#\\Program.csproj",
+      "projectName": "Program",
+      "projectPath": "C:\\Users\\Louis\\Desktop\\Genesis\\RocketElevatorController\\CommercialControllerC#\\Program.csproj",
       "packagesPath": "C:\\Users\\Louis\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Louis\\Desktop\\Genesis\\RocketElevatorController\\CommercialControllerC#\\obj\\",
       "projectStyle": "PackageReference",
